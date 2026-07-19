@@ -64,3 +64,12 @@ output:
 logging:
   # 日志级别：DEBUG / INFO / WARNING / ERROR
   level: "INFO"
+
+# Web 界面专用配置
+web:
+  # 网页标题
+  title: "小红书评论情感分析"
+  # 网页版默认最大采集评论数（0 = 不限制）
+  default_max_comments: 0
+  # 数据表格默认每页显示行数
+  default_page_size: 20
