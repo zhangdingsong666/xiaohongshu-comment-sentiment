@@ -8,7 +8,8 @@
 3. 自动滚动页面触发懒加载，并尝试点击「展开更多回复」获取楼中楼。
 4. 登录态保存到 auth_state.json，后续运行可复用。
 """
-import json
+from __future__ import annotations
+
 import logging
 import os
 import random
@@ -16,9 +17,6 @@ import re
 import time
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
-
-from playwright.sync_api import sync_playwright, Page, Response
-from playwright.sync_api import TimeoutError as PlaywrightTimeout
 
 from utils import random_sleep, ensure_dir
 
@@ -198,6 +196,10 @@ class XHSCrawler:
     # 单次采集流程
     # ------------------------------------------------------------------
     def _run_once(self, url: str) -> List[Dict[str, Any]]:
+        """单次采集流程，Playwright 在这里做延迟导入，避免 CLI 启动时强依赖"""
+        from playwright.sync_api import sync_playwright
+        from playwright.sync_api import TimeoutError as PlaywrightTimeout
+
         note_id = self.extract_note_id(url)
         target_url = self._build_note_url(note_id)
         logging.info("目标笔记页面：%s", target_url)
