@@ -102,7 +102,38 @@ python src/main.py --url "https://www.xiaohongshu.com/explore/你的笔记ID" --
 | `raw_label` | 模型原始输出标签 |
 | `source` | 分析来源：`transformers` / `snownlp` |
 
-## 五、项目结构
+## 五、Web 可视化界面（推荐新手）
+
+项目已内置基于 **Streamlit** 的网页版，无需记命令行，输入链接即可得到：
+- 评论数据表格
+- 情感分布饼状图
+- 可下载的 Excel 文件
+
+### 1. 安装 Web 相关依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. 启动网页
+
+```bash
+streamlit run web/app.py
+```
+
+启动后浏览器会自动打开 `http://localhost:8501`。
+
+### 3. 使用步骤
+
+1. 在页面输入框粘贴小红书笔记链接。
+2. 在左侧栏设置「最大采集评论数」。
+3. 首次使用请**取消勾选「无头模式」**，点击「开始分析」后会弹出浏览器，扫码登录小红书。
+4. 登录成功后，程序会自动保存 `auth_state.json`，后续运行可勾选无头模式。
+5. 等待爬取与分析完成，即可查看表格、饼图，并下载 Excel。
+
+> **提示**：网页版与命令行版共用 `config.yaml`，反爬延时、User-Agent 等配置会同时生效。
+
+## 六、项目结构
 
 ```
 xiaohongshu-comment-sentiment/
@@ -112,15 +143,19 @@ xiaohongshu-comment-sentiment/
 ├── .gitignore
 ├── data/                     # 导出结果目录（已加入 .gitignore）
 │   └── .gitignore
-└── src/
+├── src/
+│   ├── __init__.py
+│   ├── crawler.py            # Playwright 爬虫核心
+│   ├── sentiment_analyzer.py # 情感分析模块
+│   ├── main.py               # 命令行入口
+│   └── utils.py              # 配置/日志/导出等工具函数
+└── web/
     ├── __init__.py
-    ├── crawler.py            # Playwright 爬虫核心
-    ├── sentiment_analyzer.py # 情感分析模块
-    ├── main.py               # 命令行入口
-    └── utils.py              # 配置/日志/导出等工具函数
+    ├── app.py                # Streamlit 网页主入口
+    └── helpers.py            # Excel / 饼图生成工具
 ```
 
-## 六、常见问题与注意事项
+## 七、常见问题与注意事项
 
 ### Q1：为什么第一次运行要扫码？
 小红书部分笔记/评论需要登录态才能完整查看。扫码登录后，程序会将浏览器 `storage_state` 保存到 `auth_state.json`，后续运行自动复用。
