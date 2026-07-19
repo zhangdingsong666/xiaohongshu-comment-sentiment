@@ -1,0 +1,8 @@
+# Python >= 3.10
+playwright>=1.40.0
+transformers>=4.35.0
+torch>=2.0.0
+snownlp>=0.12.3
+pandas>=2.0.0
+PyYAML>=6.0
+requests>=2.31.0

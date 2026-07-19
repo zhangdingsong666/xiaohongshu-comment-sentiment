@@ -1,0 +1,66 @@
+# 小红书评论爬取 + 中文情感三分类 配置文件
+# 使用方法：复制本文件为 config.yaml，按需修改后运行主程序
+
+crawler:
+  # 是否无头运行浏览器；首次登录建议 false，方便扫码
+  headless: false
+
+  # 登录状态保存路径，复用后可避免每次都扫码
+  auth_state_path: "./auth_state.json"
+
+  # User-Agent 轮换列表，每次启动浏览器随机选取
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0"
+
+  # 页面元素默认等待超时（毫秒）
+  default_timeout: 30000
+
+  # 每次滚动后的随机停留时间（秒），2-5 秒为默认安全值
+  scroll_pause_min: 2.0
+  scroll_pause_max: 5.0
+
+  # 单条笔记最大滚动次数，防止无限滚动
+  max_scrolls: 100
+
+  # 最大采集评论数（含楼中楼），0 表示不限制
+  max_comments: 0
+
+  # 网络/页面加载失败时的重试次数
+  max_retries: 3
+
+  # 重试前等待秒数
+  retry_delay: 5
+
+  # 笔记详情页模板，{note_id} 会被替换
+  note_base_url: "https://www.xiaohongshu.com/explore/{note_id}"
+
+sentiment:
+  # 默认 HuggingFace 情感三分类模型（支持中文）
+  # 该模型输出 negative / neutral / positive 三分类
+  model_name: "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+
+  # 当 HuggingFace 模型加载或推理失败时，是否回退到 snownlp
+  fallback_to_snownlp: true
+
+  # 推理设备：-1 表示 CPU，0 表示 GPU（CUDA）
+  device: -1
+
+  # 单条评论最大字符长度，超过则截断
+  max_length: 512
+
+  # snownlp 阈值：分数 >0.6 为正面，<0.4 为负面，其余为中性
+  snownlp_threshold_pos: 0.6
+  snownlp_threshold_neg: 0.4
+
+output:
+  # 默认导出目录
+  default_dir: "./data"
+
+  # CSV 文件编码，utf-8-sig 可在 Excel 中正确显示中文
+  csv_encoding: "utf-8-sig"
+
+logging:
+  # 日志级别：DEBUG / INFO / WARNING / ERROR
+  level: "INFO"

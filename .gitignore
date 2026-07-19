@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# 数据与登录态（用户本地生成，不提交）
+data/
+auth_state.json
+
+# 模型缓存
+models/
+*.bin
+*.safetensors
+*.model
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

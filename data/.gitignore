@@ -1,0 +1,3 @@
+# 忽略 data 目录下所有导出文件，但保留本 .gitignore
+*
+!.gitignore
